@@ -1,9 +1,9 @@
-import { Globe, ShieldCheck, Package, Headphones } from "lucide-react";
+import { Truck, ShieldCheck, Package, Headphones } from "lucide-react";
 
 const badges = [
   {
-    icon: Globe,
-    title: "Worldwide Shipping",
+    icon: Truck,
+    title: "US Shipping",
     desc: "Fast & secure to every collector",
   },
   {

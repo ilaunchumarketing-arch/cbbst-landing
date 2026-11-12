@@ -30,10 +30,25 @@
   box-sizing: border-box;
 }
 
+/* Keep every page fixed/centered — no sideways drift or swipe-pan on mobile.
+   - scrollbar-gutter: reserve scrollbar space so content doesn't shift between pages.
+   - overflow-x: clip on html+body: kill any horizontal scroll (clip keeps the sticky navbar working).
+   - overscroll-behavior-x: none: stop the horizontal rubber-band/swipe bounce on touch devices.
+   - width cap: nothing can exceed the viewport. */
+html {
+  scrollbar-gutter: stable;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Inter", sans-serif;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
 }
 
 /* Scrolling ticker animation */
@@ -150,9 +165,10 @@ body {
   position: absolute; inset: 0;
   mix-blend-mode: screen;
   pointer-events: none;
+  opacity: 0.55;
 }
-.glitch::before { color: #00b4ff; transform: translate(-2px, 0); animation: glitch-x 3.4s infinite steps(2, end); }
-.glitch::after  { color: #e8192c; transform: translate(2px, 0);  animation: glitch-x 2.6s infinite reverse steps(2, end); }
+.glitch::before { color: #00b4ff; transform: translate(-1px, 0); animation: glitch-x 7s ease-in-out infinite; }
+.glitch::after  { color: #e8192c; transform: translate(1px, 0);  animation: glitch-x 5.5s ease-in-out infinite reverse; }
 
 @keyframes noise {
   0%,100% { transform: translate(0,0); }
@@ -191,6 +207,11 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in { animation: fade-in 1s ease-out both; }
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-modal-in { animation: modal-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .delay-200 { animation-delay: 0.2s; }
 .delay-400 { animation-delay: 0.4s; }
 .delay-600 { animation-delay: 0.6s; }
@@ -210,4 +231,448 @@ body {
 .blood-streak {
   background: linear-gradient(180deg, #c40a18 0%, #c40a18 60%, rgba(196,10,24,0) 100%);
   clip-path: polygon(0 0, 100% 0, 92% 70%, 80% 95%, 50% 100%, 24% 90%, 10% 72%, 0 100%);
+}
+
+/* ============================================================
+   PRODUCT-PAGE-SPECIFIC ANIMATIONS
+   ============================================================ */
+
+/* Foil shimmer — for EC13 Foil Virgin */
+@keyframes foil-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.foil-shimmer {
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 215, 0, 0.45) 38%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 215, 0, 0.45) 62%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: foil-shimmer 4.5s linear infinite;
+  mix-blend-mode: overlay;
+}
+
+/* Cyberpunk neon grid — for Monster Racing League */
+@keyframes grid-drift {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 80px 80px, -80px 80px; }
+}
+.neon-grid {
+  background-image:
+    linear-gradient(rgba(255,72,200,0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,255,0.18) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px;
+  animation: grid-drift 12s linear infinite;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* Dust drift — for Of The Earth desert noir */
+@keyframes dust-drift {
+  0%   { transform: translate3d(-3%, 0, 0); opacity: 0.4; }
+  50%  { transform: translate3d(2%, -1%, 0); opacity: 0.7; }
+  100% { transform: translate3d(-3%, 0, 0); opacity: 0.4; }
+}
+.dust-drift {
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(180,130,80,0.22), transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(140,90,50,0.18), transparent 65%);
+  animation: dust-drift 18s ease-in-out infinite;
+}
+
+/* Frost / Norse cold — for Odin */
+@keyframes frost-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(180, 220, 255, 0.08) inset,
+      0 0 40px rgba(80, 200, 220, 0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(180, 220, 255, 0.15) inset,
+      0 0 80px rgba(80, 200, 220, 0.22);
+  }
+}
+.frost-pulse { animation: frost-pulse 6s ease-in-out infinite; }
+
+/* Chrome biker streak — for Lobo */
+@keyframes streak {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.chrome-streak {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(232, 25, 44, 0.3),
+    rgba(255, 255, 255, 0.45),
+    rgba(232, 25, 44, 0.3),
+    transparent
+  );
+  animation: streak 5s ease-in-out infinite;
+}
+
+/* Ink splatter pulse — for EC13 B&W */
+@keyframes ink-pulse {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50%      { opacity: 0.9; transform: scale(1.03); }
+}
+.ink-pulse { animation: ink-pulse 7s ease-in-out infinite; }
+
+/* Slow zoom (Ken Burns) for hero covers */
+@keyframes slow-zoom {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+.animate-slow-zoom { animation: slow-zoom 18s ease-in-out alternate infinite; }
+
+/* Hero cover stack — 6 covers in 3D perspective fan */
+.cover-stack {
+  perspective: 1400px;
+  perspective-origin: center 40%;
+}
+.cover-card {
+  /* Each card gets its X offset via the --cover-x custom property set inline */
+  transform: translateX(var(--cover-x, 0));
+  transition: transform 0.5s cubic-bezier(.2,.8,.2,1), filter 0.5s;
+  will-change: transform;
+}
+.cover-card:hover {
+  /* Preserve the X offset, just lift + scale on hover */
+  transform: translateX(var(--cover-x, 0)) translateY(-18px) scale(1.08);
+  filter: drop-shadow(0 30px 60px rgba(255,215,0,0.35)) drop-shadow(0 0 40px rgba(232,25,44,0.4));
+  z-index: 50 !important;
+}
+
+/* Flying bats (Batman drops) — a single fast rush that erupts off the screen,
+   then holds at opacity 0 so the page stays clean. */
+.bat {
+  animation-name: bat-fly;
+  animation-timing-function: cubic-bezier(0.2, 0.6, 0.3, 1);
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.bat-wing {
+  display: block;
+  animation: bat-flap 0.14s ease-in-out infinite;
+  transform-origin: center;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 10px rgba(232, 25, 44, 0.8));
+}
+@keyframes bat-fly {
+  0%   { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  12%  { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(var(--bat-drift, 0), -78vh) scale(2.3); opacity: 0; }
+}
+@keyframes bat-flap {
+  0%, 100% { transform: scaleX(1); }
+  50%      { transform: scaleX(0.45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bat { animation: none; opacity: 0; }
+  .bat-wing { animation: none; }
+}
+
+/* Electric storm (lightning drops, e.g. The Horror of Godzilla) — bolts strike
+   across the hero, the sky flashes electric-blue, and the headline crackles.
+   Fully paused under prefers-reduced-motion. */
+.storm-flash {
+  opacity: 0;
+  animation: storm-flash var(--flash-dur, 7s) steps(1, end) infinite;
+  will-change: opacity;
+}
+@keyframes storm-flash {
+  0%, 100% { opacity: 0; }
+  1%  { opacity: 0.55; }
+  3%  { opacity: 0.12; }
+  5%  { opacity: 0.7; }
+  7%  { opacity: 0; }
+  8%  { opacity: 0.32; }
+  10% { opacity: 0; }
+}
+.bolt {
+  opacity: 0;
+  animation: bolt-strike var(--bolt-dur, 6s) steps(1, end) infinite;
+  animation-delay: var(--bolt-delay, 0s);
+  will-change: opacity;
+}
+.bolt path {
+  filter: drop-shadow(0 0 4px rgba(0, 180, 255, 0.95)) drop-shadow(0 0 14px rgba(0, 180, 255, 0.7));
+}
+@keyframes bolt-strike {
+  0%, 100% { opacity: 0; }
+  2% { opacity: 1; }
+  4% { opacity: 0.2; }
+  6% { opacity: 0.9; }
+  9% { opacity: 0; }
+}
+/* Electric headline — white letters wrapped in a crackling blue glow that flickers. */
+.electric-title {
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(0, 180, 255, 0.95),
+    0 0 20px rgba(0, 180, 255, 0.6),
+    0 0 44px rgba(0, 180, 255, 0.35);
+  animation: electric-flicker 4.2s infinite;
+}
+@keyframes electric-flicker {
+  0%, 41%, 47%, 100% {
+    text-shadow: 0 0 6px rgba(0, 180, 255, 0.95), 0 0 20px rgba(0, 180, 255, 0.6), 0 0 44px rgba(0, 180, 255, 0.35);
+  }
+  43% { text-shadow: 0 0 2px rgba(0, 180, 255, 0.45); }
+  45% { text-shadow: 0 0 10px rgba(0, 180, 255, 1), 0 0 30px rgba(0, 180, 255, 0.85), 0 0 62px rgba(0, 180, 255, 0.5); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .storm-flash { animation: none; opacity: 0; }
+  .bolt { animation: none; opacity: 0; }
+  .electric-title { animation: none; }
+}
+
+/* Falling ninja stars (TMNT drops) — spinning steel shuriken rain down the hero
+   on staggered loops with a toxic-green glint. Fully paused under
+   prefers-reduced-motion. */
+.shuriken-fall {
+  opacity: 0;
+  animation: shuriken-fall var(--fall-dur, 4s) linear infinite;
+  animation-delay: var(--fall-delay, 0s);
+  will-change: transform, opacity;
+}
+@keyframes shuriken-fall {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  6%   { opacity: var(--fall-op, 0.8); }
+  88%  { opacity: var(--fall-op, 0.8); }
+  100% { transform: translate(var(--fall-drift, 0px), 108vh); opacity: 0; }
+}
+.shuriken-spin {
+  animation: shuriken-spin var(--spin-dur, 0.9s) linear infinite;
+  will-change: transform;
+}
+@keyframes shuriken-spin {
+  to { transform: rotate(var(--spin-to, 360deg)); }
+}
+.shuriken-star {
+  display: block;
+  filter: drop-shadow(0 0 3px rgba(122, 199, 12, 0.75)) drop-shadow(0 0 10px rgba(122, 199, 12, 0.4))
+    drop-shadow(0 3px 5px rgba(0, 0, 0, 0.8));
+}
+/* Ninja headline — white letters in a toxic-ooze green glow with a slash flicker. */
+.ninja-title {
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(122, 199, 12, 0.9),
+    0 0 20px rgba(122, 199, 12, 0.55),
+    0 0 44px rgba(122, 199, 12, 0.3);
+  animation: ninja-flicker 5.5s infinite;
+}
+@keyframes ninja-flicker {
+  0%, 55%, 61%, 100% {
+    text-shadow: 0 0 6px rgba(122, 199, 12, 0.9), 0 0 20px rgba(122, 199, 12, 0.55), 0 0 44px rgba(122, 199, 12, 0.3);
+  }
+  57% { text-shadow: 0 0 2px rgba(122, 199, 12, 0.4); }
+  59% { text-shadow: 0 0 10px rgba(122, 199, 12, 1), 0 0 32px rgba(122, 199, 12, 0.8), 0 0 60px rgba(122, 199, 12, 0.45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shuriken-fall { animation: none; opacity: 0; }
+  .shuriken-spin { animation: none; }
+  .ninja-title { animation: none; }
+}
+
+/* Glowing fire sparks (Battle Beast drops) — embers sway upward out of a
+   breathing heat glow. Fully paused under prefers-reduced-motion. */
+.ember-base {
+  animation: ember-breathe 7s ease-in-out infinite;
+  will-change: opacity;
+}
+@keyframes ember-breathe {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.ember {
+  opacity: 0;
+  animation: ember-rise var(--ember-dur, 7s) linear infinite;
+  animation-delay: var(--ember-delay, 0s);
+  will-change: transform, opacity;
+}
+@keyframes ember-rise {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0; }
+  8%   { opacity: var(--ember-op, 0.8); }
+  50%  { transform: translate(var(--ember-sway, 0px), -42vh) scale(0.85); }
+  85%  { opacity: calc(var(--ember-op, 0.8) * 0.6); }
+  100% { transform: translate(calc(var(--ember-sway, 0px) * -0.4), -86vh) scale(0.45); opacity: 0; }
+}
+/* Battle Beast headline — white letters wrapped in forge-fire orange that surges. */
+.ember-title {
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(255, 122, 0, 0.9),
+    0 0 20px rgba(255, 122, 0, 0.55),
+    0 0 44px rgba(255, 122, 0, 0.3);
+  animation: ember-surge 5s ease-in-out infinite;
+}
+@keyframes ember-surge {
+  0%, 100% { text-shadow: 0 0 6px rgba(255, 122, 0, 0.9), 0 0 20px rgba(255, 122, 0, 0.55), 0 0 44px rgba(255, 122, 0, 0.3); }
+  50%      { text-shadow: 0 0 10px rgba(255, 160, 40, 1), 0 0 32px rgba(255, 122, 0, 0.8), 0 0 60px rgba(255, 122, 0, 0.45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ember { animation: none; opacity: 0; }
+  .ember-base { animation: none; }
+  .ember-title { animation: none; }
+}
+
+/* Ravens + red fog (Regicide drops) — corvids beat across the sky while
+   blood-red fog banks rise off the bottom edge. Fully paused under
+   prefers-reduced-motion. */
+.raven {
+  opacity: 0;
+  animation: raven-cross var(--raven-dur, 10s) linear infinite;
+  animation-delay: var(--raven-delay, 0s);
+  will-change: transform, opacity;
+}
+@keyframes raven-cross {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  5%   { opacity: var(--raven-op, 0.7); }
+  50%  { transform: translate(calc(var(--raven-dist, 115vw) / 2), -14px); }
+  92%  { opacity: var(--raven-op, 0.7); }
+  100% { transform: translate(var(--raven-dist, 115vw), 0); opacity: 0; }
+}
+.raven-wing {
+  display: block;
+  animation: raven-flap var(--flap-dur, 0.3s) ease-in-out infinite;
+  transform-origin: center;
+  filter: drop-shadow(0 0 2px rgba(200, 16, 46, 0.8)) drop-shadow(0 0 10px rgba(200, 16, 46, 0.45))
+    drop-shadow(0 3px 6px rgba(0, 0, 0, 0.8));
+}
+@keyframes raven-flap {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.35) translateY(6px); }
+}
+.fog-base {
+  animation: fog-breathe 8s ease-in-out infinite;
+  will-change: opacity;
+}
+@keyframes fog-breathe {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1; }
+}
+.fog-puff {
+  opacity: 0;
+  animation: fog-rise var(--fog-dur, 12s) linear infinite;
+  animation-delay: var(--fog-delay, 0s);
+  will-change: transform, opacity;
+}
+@keyframes fog-rise {
+  0%   { transform: translate(0, 0) scale(0.8); opacity: 0; }
+  12%  { opacity: 0.85; }
+  70%  { opacity: 0.4; }
+  100% { transform: translate(var(--fog-drift, 0px), -78vh) scale(1.6); opacity: 0; }
+}
+/* Regicide headline — white letters soaked in a blood-red glow with a slow surge. */
+.regicide-title {
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(200, 16, 46, 0.9),
+    0 0 20px rgba(200, 16, 46, 0.55),
+    0 0 44px rgba(200, 16, 46, 0.3);
+  animation: regicide-surge 6s ease-in-out infinite;
+}
+@keyframes regicide-surge {
+  0%, 100% { text-shadow: 0 0 6px rgba(200, 16, 46, 0.9), 0 0 20px rgba(200, 16, 46, 0.55), 0 0 44px rgba(200, 16, 46, 0.3); }
+  50%      { text-shadow: 0 0 10px rgba(200, 16, 46, 1), 0 0 32px rgba(200, 16, 46, 0.75), 0 0 64px rgba(200, 16, 46, 0.45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .raven { animation: none; opacity: 0; }
+  .raven-wing { animation: none; }
+  .fog-puff { animation: none; opacity: 0; }
+  .fog-base { animation: none; }
+  .regicide-title { animation: none; }
+}
+
+/* Hero intro — big cover drops in first, then the shelf covers deal in like cards and stack */
+.hero-cover-in {
+  animation: hero-cover-in 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes hero-cover-in {
+  0%   { transform: scale(1.18) translateY(-5%); opacity: 0; }
+  55%  { opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.deal-card {
+  animation: deal-in 0.6s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  will-change: transform, opacity;
+}
+@keyframes deal-in {
+  0%   { transform: translateX(215%) translateY(-14%) rotate(11deg) scale(0.7); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: var(--final-tf, none); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-cover-in { animation: none; }
+  .deal-card { animation: none; transform: var(--final-tf, none); }
+}
+
+@keyframes cover-float-a {
+  0%, 100% { transform: rotateY(-25deg) translateX(0) translateY(0); }
+  50%      { transform: rotateY(-25deg) translateX(-4px) translateY(-8px); }
+}
+@keyframes cover-float-b {
+  0%, 100% { transform: rotateY(-15deg) translateY(0); }
+  50%      { transform: rotateY(-15deg) translateY(-6px); }
+}
+@keyframes cover-float-c {
+  0%, 100% { transform: rotateY(-5deg) translateY(0); }
+  50%      { transform: rotateY(-5deg) translateY(-10px); }
+}
+@keyframes cover-float-d {
+  0%, 100% { transform: rotateY(5deg) translateY(0); }
+  50%      { transform: rotateY(5deg) translateY(-7px); }
+}
+@keyframes cover-float-e {
+  0%, 100% { transform: rotateY(15deg) translateY(0); }
+  50%      { transform: rotateY(15deg) translateY(-12px); }
+}
+@keyframes cover-float-f {
+  0%, 100% { transform: rotateY(25deg) translateX(0) translateY(0); }
+  50%      { transform: rotateY(25deg) translateX(4px) translateY(-9px); }
+}
+
+.cover-1 { animation: cover-float-a 6.2s ease-in-out infinite; }
+.cover-2 { animation: cover-float-b 6.6s ease-in-out infinite; animation-delay: 0.3s; }
+.cover-3 { animation: cover-float-c 7.0s ease-in-out infinite; animation-delay: 0.6s; }
+.cover-4 { animation: cover-float-d 6.8s ease-in-out infinite; animation-delay: 0.9s; }
+.cover-5 { animation: cover-float-e 6.4s ease-in-out infinite; animation-delay: 1.2s; }
+.cover-6 { animation: cover-float-f 6.9s ease-in-out infinite; animation-delay: 1.5s; }
+
+/* Mobile hero carousel — snap-x with hidden scrollbar */
+.hero-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-left: 1.25rem;
+}
+.hero-scroll::-webkit-scrollbar { display: none; }
+.hero-scroll > * { scroll-snap-align: center; }
+
+/* ————— Drop-popup cover carousel —————
+   The swipeable cover track. Transform-only so it stays on the compositor, and the
+   slide motion is removed entirely under prefers-reduced-motion (the slide still
+   changes — only the animation goes). */
+.drop-track {
+  transition: transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  touch-action: pan-y; /* let the modal scroll vertically; we own the horizontal axis */
+}
+
+.drop-fade {
+  transition: color 300ms ease, border-color 300ms ease, background-color 300ms ease, opacity 300ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop-track { transition: none; }
+  .drop-fade { transition: none; }
 }

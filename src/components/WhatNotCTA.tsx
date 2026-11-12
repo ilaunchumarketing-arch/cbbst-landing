@@ -9,20 +9,21 @@ export default function WhatNotCTA() {
 
       <div className="relative z-10 max-w-3xl mx-auto text-center">
         <span className="text-cbbst-red text-xs font-bold tracking-widest">
-          🎙️ EVERY FRIDAY NIGHT · 8PM EST
+          🎙️ LIVE ON WHATNOT
         </span>
         <h2 className="text-white font-black text-4xl sm:text-5xl tracking-tight mt-3 mb-4">
           CATCH US LIVE ON WHATNOT
         </h2>
         <p className="text-white/60 text-sm sm:text-base mb-8 max-w-xl mx-auto">
-          Join our weekly livestream for rare keys, exclusive variants, CGC
-          slabs, and giveaways. New drops every Friday — follow{" "}
+          Join the livestream for rare keys, exclusive variants, CGC
+          slabs, and giveaways. Follow{" "}
           <span className="text-cbbst-red font-bold">@CBBST</span> so you
-          don&apos;t miss the next one.
+          don&apos;t miss the next drop.
         </p>
         <Link
-          href="https://www.whatnot.com"
+          href="https://www.whatnot.com/user/cbbst"
           target="_blank"
+          rel="noopener noreferrer"
           className="inline-block bg-cbbst-red hover:bg-cbbst-red-dark text-white font-bold text-sm tracking-wider px-10 py-4 transition-colors"
         >
           FOLLOW @CBBST ON WHATNOT →

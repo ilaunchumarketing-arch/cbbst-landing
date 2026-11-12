@@ -1,8 +1,8 @@
 "use client";
 
 const announcements = [
-  { emoji: "🎙️", text: "LIVE ON WHATNOT EVERY FRIDAY — FOLLOW @CBBST FOR DROPS" },
-  { emoji: "⚡", text: "FREE SHIPPING ON ORDERS OVER $75" },
+  { emoji: "🚚", text: "FREE SHIPPING ON ORDERS $200+" },
+  { emoji: "🎙️", text: "LIVE ON WHATNOT — FOLLOW @CBBST FOR DROPS" },
   { emoji: "🏆", text: "CGC 9.8 GRADED SLABS IN STOCK NOW" },
   { emoji: "🔥", text: "NEW EXCLUSIVES DROP EVERY WEEK — DON'T MISS OUT" },
   { emoji: "💥", text: "EXCLUSIVE VARIANTS YOU WON'T FIND ANYWHERE ELSE" },

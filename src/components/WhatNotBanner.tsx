@@ -11,12 +11,13 @@ export default function WhatNotBanner() {
           <p className="text-white/70 text-sm">
             Join us on{" "}
             <span className="text-cbbst-red font-bold">WhatNot</span> — Live
-            comic auctions, exclusive drops &amp; collector deals every Friday!
+            comic auctions, exclusive drops &amp; collector deals on the live show.
           </p>
         </div>
         <Link
-          href="https://www.whatnot.com"
+          href="https://www.whatnot.com/user/cbbst"
           target="_blank"
+          rel="noopener noreferrer"
           className="text-cbbst-red hover:text-white text-xs font-bold tracking-wider transition-colors"
         >
           WATCH LIVE →
